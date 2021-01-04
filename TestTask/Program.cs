@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TestTask
 {
@@ -58,16 +59,25 @@ namespace TestTask
         /// <returns>Коллекция статистик по каждой букве, что была прочитана из стрима.</returns>
         private static IList<LetterStats> FillSingleLetterStats(IReadOnlyStream stream)
         {
+            var statsList = new List<LetterStats>();
+
             stream.ResetPositionToStart();
             while (!stream.IsEof)
             {
                 char c = stream.ReadNextChar();
                 // TODO : заполнять статистику с использованием метода IncStatistic. Учёт букв - регистрозависимый.
+
+                if (!statsList.Exists(item => item.Letter == c.ToString()))
+                {
+                    LetterStats letterStats = new LetterStats(c.ToString());
+
+                    statsList.Add(letterStats);
+                }
+
+                IncStatistic(statsList.Find(item => item.Letter == c.ToString()));
             }
 
-            //return ???;
-
-            throw new NotImplementedException();
+            return statsList;
         }
 
         /// <summary>
@@ -108,7 +118,7 @@ namespace TestTask
                 case CharType.Vowel:
                     break;
             }
-            
+
         }
 
         /// <summary>
