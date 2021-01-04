@@ -20,7 +20,7 @@ namespace TestTask
             // TODO : Заменить на создание реального стрима для чтения файла!
             _localStream = null;
         }
-                
+
         /// <summary>
         /// Флаг окончания файла.
         /// </summary>
@@ -55,6 +55,14 @@ namespace TestTask
 
             _localStream.Position = 0;
             IsEof = false;
+        }
+
+        /// <summary>
+        /// Освобождение занятых ресурсов
+        /// </summary>
+        public void Dispose()
+        {
+            _localStream.Close();
         }
     }
 }
