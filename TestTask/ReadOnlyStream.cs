@@ -55,7 +55,7 @@ namespace TestTask
         /// </summary>
         public void ResetPositionToStart()
         {
-            if (_localStream == null)
+            if (_streamReader == null || _streamReader.Peek() == -1)
             {
                 IsEof = true;
                 return;
