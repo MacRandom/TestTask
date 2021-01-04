@@ -31,8 +31,8 @@ namespace TestTask
                 doubleLetterStats = FillDoubleLetterStats(inputStream2);
             }
 
-            RemoveCharStatsByType(singleLetterStats, CharType.Vowel);
-            RemoveCharStatsByType(doubleLetterStats, CharType.Consonants);
+            RemoveCharStatsByType(ref singleLetterStats, CharType.Vowel);
+            RemoveCharStatsByType(ref doubleLetterStats, CharType.Consonants);
 
             Console.WriteLine(Environment.NewLine + $"Статистика вхождения символов в файле {args[0]}:");
             PrintStatistic(singleLetterStats);
@@ -112,17 +112,23 @@ namespace TestTask
         /// </summary>
         /// <param name="letters">Коллекция со статистиками вхождения букв/пар</param>
         /// <param name="charType">Тип букв для анализа</param>
-        private static void RemoveCharStatsByType(IList<LetterStats> letters, CharType charType)
+        private static void RemoveCharStatsByType(ref IList<LetterStats> letters, CharType charType)
         {
             // TODO : Удалить статистику по запрошенному типу букв.
+            Func<char, bool> predicate = null;
+
             switch (charType)
             {
                 case CharType.Consonants:
+                    predicate = LetterAnalyzer.IsConsonant;
                     break;
                 case CharType.Vowel:
+                    predicate = LetterAnalyzer.IsVowel;
                     break;
             }
 
+            if (predicate != null)
+                letters = letters.Where(item => !predicate(item.Letter.ToLower().First())).ToList();
         }
 
         /// <summary>
