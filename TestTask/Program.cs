@@ -17,6 +17,7 @@ namespace TestTask
         /// Второй параметр - путь до второго файла.</param>
         static void Main(string[] args)
         {
+            Console.WriteLine("Подсчёт статистики вхождения символов/пар символов в заданных файлах.");
             IList<LetterStats> singleLetterStats;
             IList<LetterStats> doubleLetterStats;
 
@@ -33,7 +34,10 @@ namespace TestTask
             RemoveCharStatsByType(singleLetterStats, CharType.Vowel);
             RemoveCharStatsByType(doubleLetterStats, CharType.Consonants);
 
+            Console.WriteLine(Environment.NewLine + $"Статистика вхождения символов в файле {args[0]}:");
             PrintStatistic(singleLetterStats);
+
+            Console.WriteLine(Environment.NewLine + $"Статистика вхождения пар символов в файле {args[1]}:");
             PrintStatistic(doubleLetterStats);
 
             // TODO : Необжодимо дождаться нажатия клавиши, прежде чем завершать выполнение программы.
@@ -131,7 +135,10 @@ namespace TestTask
         private static void PrintStatistic(IEnumerable<LetterStats> letters)
         {
             // TODO : Выводить на экран статистику. Выводить предварительно отсортировав по алфавиту!
-            throw new NotImplementedException();
+            letters = letters.OrderBy(item => item.Letter);
+
+            foreach (var item in letters)
+                Console.WriteLine($"{item.Letter} : {item.Count}");
         }
 
         /// <summary>
