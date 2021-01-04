@@ -93,16 +93,36 @@ namespace TestTask
         /// <returns>Коллекция статистик по каждой букве, что была прочитана из стрима.</returns>
         private static IList<LetterStats> FillDoubleLetterStats(IReadOnlyStream stream)
         {
+            var statsList = new List<LetterStats>();
+
             stream.ResetPositionToStart();
+
+            string prev = stream.ReadNextChar().ToString().ToLower();
+
             while (!stream.IsEof)
             {
-                char c = stream.ReadNextChar();
+                string next = stream.ReadNextChar().ToString().ToLower();
+
                 // TODO : заполнять статистику с использованием метода IncStatistic. Учёт букв - НЕ регистрозависимый.
+
+                if (prev != next)
+                {
+                    prev = next;
+                    continue;
+                }
+
+                string pair = string.Concat(next, prev);
+
+                if (!statsList.Exists(item => item.Letter == pair))
+                {
+                    var stats = new LetterStats(pair);
+                    statsList.Add(stats);
+                }
+
+                IncStatistic(statsList.Find(item => item.Letter == pair));
             }
 
-            //return ???;
-
-            throw new NotImplementedException();
+            return statsList;
         }
 
         /// <summary>
@@ -155,7 +175,5 @@ namespace TestTask
         {
             letterStats.Count++;
         }
-
-
     }
 }
